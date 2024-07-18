@@ -25,7 +25,7 @@ public class AddPlanetUseCase {
         return planetGateway.addPlanet(planet);
     }
 
-    private Integer numberApparitions(String name) {
+    public Integer numberApparitions(String name) {
         final String SEARCH_PLANET_API = "https://swapi.dev/api/planets/?search=";
         int number = 0;
         HttpResponse<String> response = null;
@@ -34,9 +34,7 @@ public class AddPlanetUseCase {
                     HttpRequest.newBuilder().uri(URI.create(SEARCH_PLANET_API+name)).build(),
                     HttpResponse.BodyHandlers.ofString()
             );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 

@@ -9,15 +9,22 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import study.luiz.planets.entity.planet.exception.PlanetNotFoundException;
 
 import java.util.*;
 
+@ControllerAdvice
 public class ErrorHandler {
 
-
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity handleError404() {
+    public ResponseEntity handleError404(EntityNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(PlanetNotFoundException.class)
+    public ResponseEntity handlePlanetNotFoundException(PlanetNotFoundException e) {
         return ResponseEntity.notFound().build();
     }
 
@@ -49,6 +56,7 @@ public class ErrorHandler {
     public ResponseEntity handleError400(HttpMessageNotReadableException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity handleValidationError(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();

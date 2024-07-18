@@ -3,7 +3,7 @@ package study.luiz.planets.infrasctructure.planet.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import study.luiz.planets.entity.planet.exception.PlanetNotFoundException;
 import study.luiz.planets.infrasctructure.planet.dto.PlanetPublicData;
@@ -17,20 +17,18 @@ public class SearchPlanetController {
     private final SearchPlanetByIdUseCase searchPlanetByIdUseCase;
     private final SearchPlanetByNameUseCase searchPlanetByNameUseCase;
 
-    @GetMapping("/planets?search={idOrName}")
-    public ResponseEntity<PlanetPublicData> searchPlanet (@PathVariable String idOrName)
-            throws PlanetNotFoundException {
-
+    @GetMapping(value = "/planets", params = "search")
+    public ResponseEntity<PlanetPublicData> searchPlanet (@RequestParam String search) throws PlanetNotFoundException {
         try {
             return ResponseEntity.ok(
-                    new PlanetPublicData(searchPlanetByIdUseCase.execute(Long.parseLong(idOrName)))
+                    new PlanetPublicData(searchPlanetByIdUseCase.execute(Long.parseLong(search)))
             );
         } catch (NumberFormatException e) {
             // Verify if the input is a long, meaning it is an id
         }
 
         return ResponseEntity.ok(
-                new PlanetPublicData(searchPlanetByNameUseCase.execute(idOrName))
+                new PlanetPublicData(searchPlanetByNameUseCase.execute(search))
         );
     }
 }

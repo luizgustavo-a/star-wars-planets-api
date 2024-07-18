@@ -1,6 +1,6 @@
 create table planets(
     id bigint not null auto_increment,
-    nome varchar(100) not null unique,
+    name varchar(100) not null unique,
     climate varchar(100) not null,
     terrain varchar(100) not null,
     number_apparitions integer not null,
